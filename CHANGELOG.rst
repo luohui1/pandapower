@@ -26,6 +26,7 @@ Change Log
 - [FIXED] ``runpp_3ph`` ignored loads and sgens whose ``type`` is not "wye" or "delta", such as an sgen created by ``create_sgen`` without a type, and failed when the ``type`` column had missing values; they are now wye elements, as in ``runpp``
 - [FIXED] ``runpp_3ph`` ignored the constant power of ``storage`` elements and the ``ps_mw``/``qs_mvar`` part of ``ward`` elements; both are now balanced wye loads, and ``res_bus_3ph`` includes the ward constant power (#1919)
 - [FIXED] ``runpp_3ph`` returned NaN results for a ``gen`` with ``vm_pu=1.0`` and failed with ``xward`` elements, and ``calc_sc`` failed for 1ph faults with ``xward`` elements: the zero and negative sequence voltages of gen and xward buses are no longer initialised with the voltage set point, the xward impedance uses the 3ph base impedance, and the xward branch is added to the zero sequence system
+- [FIXED] ``runpp_3ph`` ignored the ``ps_mw``/``qs_mvar`` part of ``xward`` elements; it is now a balanced wye load like that of ``ward`` elements, and ``res_bus_3ph`` includes it (#1919)
 - [FIXED] get_element_limits now reads the N-1 loading limit from "max_loading_percent_nminus1" (as run_contingency does), keeping "max_loading_nminus1_percent" as fallback
 - [FIXED] docstrings of detect_power_station_unit and elements_on_path now match their parameters
 - [CHANGED] ran ruff format for whole project

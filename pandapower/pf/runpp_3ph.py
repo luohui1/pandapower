@@ -73,7 +73,7 @@ def _get_elements(params, net, element, phase, typ):
         is_delta = (net[element]["type"] == "delta").fillna(False).to_numpy(dtype=bool)
         active = net["_is_elements"][element] & (is_delta if typ == "delta" else ~is_delta)
     elif typ == "wye":
-        # no type column, e.g. storages, wards and sgens created by create_sgen without a type
+        # no type column, e.g. storages, (x)wards and sgens created by create_sgen without a type
         active = net["_is_elements"][element]
     else:
         active = []
@@ -104,7 +104,7 @@ def _get_elements(params, net, element, phase, typ):
             params["q" + phase + typ] = np.hstack([params["q" + phase + typ], elm[active, q[phase]] * vl * sign])
             params["b" + typ] = np.hstack([params["b" + typ], elm[active, bus].astype(np.int64)])
 
-        elif element == "ward":
+        elif element in ("ward", "xward"):
             ps_mw = [net[element].columns.get_loc("ps_mw")]
             qs_mvar = [net[element].columns.get_loc("qs_mvar")]
             params["p" + phase + typ] = np.hstack([params["p" + phase + typ], elm[active, ps_mw] / 3])
@@ -123,7 +123,7 @@ def _load_mapping(net, ppci1):
     params = {}
     phases = ["a", "b", "c"]
     load_types = ["wye", "delta"]
-    load_elements = ["load", "asymmetric_load", "sgen", "asymmetric_sgen", "storage", "ward"]
+    load_elements = ["load", "asymmetric_load", "sgen", "asymmetric_sgen", "storage", "ward", "xward"]
     # =============================================================================
     #        Loop to initialize and feed s_abc wye and delta values
     # =============================================================================

@@ -1140,9 +1140,9 @@ def test_shunt_3ph():
     assert np.max(np.abs(line_power_pp - line_power_expected)) < 1e-5
 
 
-@pytest.mark.parametrize("element", ["ward", "storage"])
+@pytest.mark.parametrize("element", ["ward", "xward", "storage"])
 def test_3ph_constant_power_of_ward_and_storage(element):
-    """The 3ph power flow must include the constant power of wards and storages like runpp does (#1919)."""
+    """The 3ph power flow must include the constant power of wards, xwards and storages like runpp does (#1919)."""
     net = pandapowerNet(name="test_3ph_constant_power_of_ward_and_storage")
     b1 = create_bus(net, 20.0)
     b2 = create_bus(net, 20.0)
@@ -1162,6 +1162,8 @@ def test_3ph_constant_power_of_ward_and_storage(element):
     )
     if element == "ward":
         create_ward(net, b2, ps_mw=1.0, qs_mvar=0.5, pz_mw=0.2, qz_mvar=0.1)
+    elif element == "xward":
+        create_xward(net, b2, ps_mw=1.0, qs_mvar=0.5, pz_mw=0.2, qz_mvar=0.1, r_ohm=1, x_ohm=10, vm_pu=1.0)
     else:
         create_storage(net, b2, p_mw=1.0, q_mvar=0.5, max_e_mwh=10)
 
